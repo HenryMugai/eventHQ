@@ -1,0 +1,45 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Verify Ticket
+{% endblock %}
+
+{% block content %}
+
+<section class="section">
+
+    <div class="container">
+
+        <h1>
+            Verify Ticket
+        </h1>
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="ticket_number"
+                placeholder="Ticket Number"
+                required>
+
+            <button type="submit">
+
+                Verify
+
+            </button>
+
+        </form>
+
+        {% if result %}
+
+        <pre>
+{{ result }}
+        </pre>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

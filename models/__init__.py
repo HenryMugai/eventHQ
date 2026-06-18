@@ -1,5 +1,3 @@
-from app import db
-
 from .user import User
 from .organiser import Organiser
 from .category import Category

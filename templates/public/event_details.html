@@ -1,0 +1,43 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+{{ event.event_name }}
+{% endblock %}
+
+{% block content %}
+
+<section class="section">
+
+    <div class="container">
+
+        <h1>
+            {{ event.event_name }}
+        </h1>
+
+        <p>
+            {{ event.description }}
+        </p>
+
+        <p>
+            Venue:
+            {{ event.venue }}
+        </p>
+
+        <p>
+            City:
+            {{ event.city }}
+        </p>
+
+        <a
+            href="{{ url_for('public.checkout', event_id=event.id) }}"
+            class="btn">
+
+            Buy Ticket
+
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

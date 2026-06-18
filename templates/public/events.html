@@ -1,0 +1,52 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Events
+{% endblock %}
+
+{% block content %}
+
+<section class="section">
+
+    <div class="container">
+
+        <h1>
+            All Events
+        </h1>
+
+        <div class="event-grid">
+
+            {% for event in events %}
+
+            <div class="event-card">
+
+                <h3>
+                    {{ event.event_name }}
+                </h3>
+
+                <p>
+                    {{ event.venue }}
+                </p>
+
+                <p>
+                    {{ event.city }}
+                </p>
+
+                <a
+                    href="{{ url_for('public.event_details', event_id=event.id) }}">
+
+                    View Event
+
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

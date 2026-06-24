@@ -4,37 +4,267 @@
 {{ event.event_name }}
 {% endblock %}
 
+{% block css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/public/event_details.css') }}">
+{% endblock %}
+
 {% block content %}
 
-<section class="section">
+<!-- Event Banner -->
+
+<section class="event-banner">
 
     <div class="container">
 
-        <h1>
-            {{ event.event_name }}
-        </h1>
+        <div class="event-banner-card">
 
-        <p>
-            {{ event.description }}
-        </p>
+            <div class="event-banner-image">
 
-        <p>
-            Venue:
-            {{ event.venue }}
-        </p>
+                Event Banner
 
-        <p>
-            City:
-            {{ event.city }}
-        </p>
+            </div>
 
-        <a
-            href="{{ url_for('public.checkout', event_id=event.id) }}"
-            class="btn">
+        </div>
 
-            Buy Ticket
+    </div>
 
-        </a>
+</section>
+
+<!-- Event Details -->
+
+<section class="event-details-section">
+
+    <div class="container">
+
+        <div class="event-layout">
+
+            <!-- Left -->
+
+            <div class="event-content">
+
+                <span class="event-category">
+
+                    {{ event.category.name if event.category else "Event" }}
+
+                </span>
+
+                <h1>
+
+                    {{ event.event_name }}
+
+                </h1>
+
+                <div class="event-meta">
+
+                    <div class="meta-item">
+
+                        📅
+
+                        <span>
+
+                            {{ event.start_datetime }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="meta-item">
+
+                        📍
+
+                        <span>
+
+                            {{ event.venue }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="meta-item">
+
+                        🏙️
+
+                        <span>
+
+                            {{ event.city }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="description-card">
+
+                    <h2>
+
+                        About This Event
+
+                    </h2>
+
+                    <p>
+
+                        {{ event.description }}
+
+                    </p>
+
+                </div>
+
+                <div class="organiser-card">
+
+                    <h2>
+
+                        Organiser
+
+                    </h2>
+
+                    <p>
+
+                        {{ event.organiser.company_name if event.organiser else "EventHQ" }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Right -->
+
+            <div class="ticket-sidebar">
+
+                <div class="ticket-card">
+
+                    <div class="ticket-header">
+
+                        <h3>
+
+                            Tickets
+
+                        </h3>
+
+                    </div>
+
+                    {% if event.ticket_types %}
+
+                    {% for ticket in event.ticket_types %}
+
+                    <div class="ticket-type">
+
+                        <div>
+
+                            <strong>
+
+                                {{ ticket.name }}
+
+                            </strong>
+
+                            <span>
+
+                                {{ ticket.quantity - ticket.sold }}
+                                Left
+                            </span>
+
+                        </div>
+
+                        <div>
+
+                            KES {{ ticket.price }}
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                    {% endif %}
+
+                    <a
+                        href="{{ url_for('public.checkout', event_id=event.id) }}"
+                        class="buy-ticket-btn">
+
+                        Buy Tickets
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Related Events -->
+
+<section class="related-events">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <h2>
+
+                You May Also Like
+
+            </h2>
+
+        </div>
+
+        <div class="related-grid">
+
+            <div class="related-card">
+
+                <div class="related-image">
+
+                    Event
+
+                </div>
+
+                <div class="related-body">
+
+                    Example Event
+
+                </div>
+
+            </div>
+
+            <div class="related-card">
+
+                <div class="related-image">
+
+                    Event
+
+                </div>
+
+                <div class="related-body">
+
+                    Example Event
+
+                </div>
+
+            </div>
+
+            <div class="related-card">
+
+                <div class="related-image">
+
+                    Event
+
+                </div>
+
+                <div class="related-body">
+
+                    Example Event
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 

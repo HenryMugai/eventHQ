@@ -15,6 +15,15 @@
         {% endblock %}
     </title>
 
+    <!-- Favicon -->
+
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href="{{ url_for('static', filename='images/favicon.svg') }}">
+
+    <!-- Google Fonts -->
+
     <link
         rel="preconnect"
         href="https://fonts.googleapis.com">
@@ -28,9 +37,15 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
+    <!-- CSS -->
+
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/layouts/base.css') }}">
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/public/home.css') }}">
 
     {% block css %}
     {% endblock %}
@@ -38,6 +53,12 @@
 </head>
 
 <body>
+
+    <!-- Background Effects -->
+
+    <div class="bg-glow glow-1"></div>
+
+    <div class="bg-glow glow-2"></div>
 
     <!-- Header -->
 
@@ -49,7 +70,23 @@
                 href="{{ url_for('public.home') }}"
                 class="logo">
 
-                EventHQ
+                <div class="logo-icon">
+
+                    EH
+
+                </div>
+
+                <div class="logo-text">
+
+                    <span>
+                        EventHQ
+                    </span>
+
+                    <small>
+                        Event Marketplace
+                    </small>
+
+                </div>
 
             </a>
 
@@ -65,11 +102,35 @@
                     Events
                 </a>
 
-                <a href="{{ url_for('auth.login') }}">
-                    Login
+                <a href="#">
+                    Categories
+                </a>
+
+                <a href="#">
+                    Venues
                 </a>
 
             </nav>
+
+            <div class="header-actions">
+
+                <a
+                    href="{{ url_for('auth.login') }}"
+                    class="btn-outline">
+
+                    Login
+
+                </a>
+
+                <a
+                    href="{{ url_for('auth.login') }}"
+                    class="btn-primary">
+
+                    Get Started
+
+                </a>
+
+            </div>
 
             <button
                 class="menu-toggle"
@@ -83,29 +144,37 @@
 
     </header>
 
-    <!-- Main -->
+    <!-- Alerts -->
 
-    <main class="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
 
-        {% if messages %}
+    <section class="alerts-section">
 
-        <div class="container alerts-wrapper">
+        <div class="container">
 
             {% for category, message in messages %}
 
             <div class="alert {{ category }}">
+
                 {{ message }}
+
             </div>
 
             {% endfor %}
 
         </div>
 
-        {% endif %}
+    </section>
 
-        {% endwith %}
+    {% endif %}
+
+    {% endwith %}
+
+    <!-- Main Content -->
+
+    <main class="main-content">
 
         {% block content %}
         {% endblock %}
@@ -118,27 +187,66 @@
 
         <div class="container">
 
-            <div class="footer-content">
+            <div class="footer-grid">
 
                 <div>
 
-                    <h3>EventHQ</h3>
+                    <div class="footer-brand">
 
-                    <p>
-                        Event Operations,
-                        Ticketing & Analytics Platform.
-                    </p>
+                        <div class="footer-logo">
+
+                            EH
+
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                EventHQ
+                            </h3>
+
+                            <p>
+                                Discover, manage and experience amazing events.
+                            </p>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-                <div class="footer-links">
+                <div>
+
+                    <h4>
+                        Platform
+                    </h4>
 
                     <a href="#">
-                        Privacy
+                        Browse Events
                     </a>
 
                     <a href="#">
-                        Terms
+                        Categories
+                    </a>
+
+                    <a href="#">
+                        Venues
+                    </a>
+
+                </div>
+
+                <div>
+
+                    <h4>
+                        Company
+                    </h4>
+
+                    <a href="#">
+                        About Us
+                    </a>
+
+                    <a href="#">
+                        Contact
                     </a>
 
                     <a href="#">
@@ -147,12 +255,29 @@
 
                 </div>
 
+                <div>
+
+                    <h4>
+                        Legal
+                    </h4>
+
+                    <a href="#">
+                        Privacy Policy
+                    </a>
+
+                    <a href="#">
+                        Terms of Service
+                    </a>
+
+                </div>
+
             </div>
 
             <div class="footer-bottom">
 
-                © 2026 EventHQ.
-                All Rights Reserved.
+                <span>
+                    © EventHQ. All Rights Reserved.
+                </span>
 
             </div>
 

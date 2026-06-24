@@ -1,0 +1,390 @@
+.hero {
+
+    padding: 7rem 0 5rem;
+}
+
+.hero-container {
+
+    display: grid;
+
+    grid-template-columns:
+        1.2fr 1fr;
+
+    gap: 4rem;
+
+    align-items: center;
+}
+
+.hero-badge {
+
+    display: inline-block;
+
+    background:
+        rgba(91,92,240,.1);
+
+    color: var(--primary);
+
+    padding: .7rem 1rem;
+
+    border-radius: 999px;
+
+    font-size: .85rem;
+
+    margin-bottom: 1.5rem;
+}
+
+.hero-content h1 {
+
+    font-size: 4rem;
+
+    line-height: 1.1;
+
+    margin-bottom: 1.5rem;
+}
+
+.hero-content p {
+
+    color: var(--text-light);
+
+    font-size: 1.1rem;
+
+    max-width: 650px;
+
+    margin-bottom: 2rem;
+}
+
+.search-box {
+
+    display: flex;
+
+    gap: 1rem;
+
+    margin-bottom: 3rem;
+}
+
+.search-box input {
+
+    flex: 1;
+
+    padding: 1rem 1.3rem;
+
+    border-radius: 14px;
+
+    border:
+        1px solid var(--border);
+
+    font-size: 1rem;
+}
+
+.search-box button {
+
+    border: none;
+
+    padding: 1rem 1.5rem;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #5b5cf0,
+            #7c3aed
+        );
+
+    color: white;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.hero-stats {
+
+    display: flex;
+
+    gap: 3rem;
+}
+
+.hero-stats h3 {
+
+    font-size: 2rem;
+}
+
+.hero-stats span {
+
+    color: var(--text-light);
+}
+
+.hero-visual {
+
+    position: relative;
+
+    height: 500px;
+}
+
+.floating-card {
+
+    position: absolute;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 1.5rem;
+
+    box-shadow: var(--shadow-lg);
+
+    font-weight: 600;
+}
+
+.card-1 {
+
+    top: 50px;
+    right: 80px;
+}
+
+.card-2 {
+
+    top: 220px;
+    left: 30px;
+}
+
+.card-3 {
+
+    bottom: 40px;
+    right: 20px;
+}
+
+.section-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 2rem;
+}
+
+.event-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(300px, 1fr));
+
+    gap: 2rem;
+}
+
+.event-card {
+
+    background: white;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow: var(--shadow);
+
+    transition: .3s;
+}
+
+.event-card:hover {
+
+    transform:
+        translateY(-8px);
+}
+
+.event-image {
+
+    height: 220px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #5b5cf0,
+            #7c3aed
+        );
+
+    color: white;
+
+    font-size: 1.1rem;
+
+    font-weight: 600;
+}
+
+.event-body {
+
+    padding: 1.5rem;
+}
+
+.event-category {
+
+    color: var(--primary);
+
+    font-size: .85rem;
+
+    font-weight: 600;
+}
+
+.event-body h3 {
+
+    margin: .8rem 0;
+}
+
+.event-body p {
+
+    color: var(--text-light);
+
+    margin-bottom: 1.2rem;
+}
+
+.event-btn {
+
+    color: var(--primary);
+
+    font-weight: 600;
+}
+
+.categories-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+
+    gap: 1.5rem;
+}
+
+.category-card {
+
+    background: white;
+
+    padding: 2rem;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    box-shadow: var(--shadow);
+
+    font-weight: 600;
+
+    transition: .3s;
+}
+
+.category-card:hover {
+
+    transform:
+        translateY(-5px);
+}
+
+.features-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 2rem;
+}
+
+.feature-card {
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 2rem;
+
+    box-shadow: var(--shadow);
+}
+
+.feature-icon {
+
+    font-size: 2rem;
+
+    margin-bottom: 1rem;
+}
+
+.feature-card p {
+
+    color: var(--text-light);
+
+    margin-top: .7rem;
+}
+
+.cta-card {
+
+    text-align: center;
+
+    padding: 5rem 2rem;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #5b5cf0,
+            #7c3aed
+        );
+
+    color: white;
+}
+
+.cta-card h2 {
+
+    font-size: 3rem;
+
+    margin-bottom: 1rem;
+}
+
+.cta-card p {
+
+    margin-bottom: 2rem;
+}
+
+@media(max-width:992px){
+
+    .hero-container,
+    .features-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .hero-content h1{
+
+        font-size:3rem;
+    }
+
+    .hero-visual{
+
+        display:none;
+    }
+}
+
+@media(max-width:768px){
+
+    .search-box{
+
+        flex-direction:column;
+    }
+
+    .hero-stats{
+
+        gap:1rem;
+
+        justify-content:space-between;
+    }
+
+    .cta-card h2{
+
+        font-size:2rem;
+    }
+}

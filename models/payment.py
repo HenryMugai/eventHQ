@@ -1,11 +1,16 @@
-from database.db import db
 from datetime import datetime
+
+from database.db import db
 
 
 class Payment(db.Model):
+
     __tablename__ = "payments"
 
-    id = db.Column(db.BigInteger, primary_key=True)
+    id = db.Column(
+        db.BigInteger,
+        primary_key=True
+    )
 
     order_id = db.Column(
         db.BigInteger,
@@ -28,7 +33,8 @@ class Payment(db.Model):
     )
 
     amount = db.Column(
-        db.Numeric(12, 2)
+        db.Numeric(12, 2),
+        nullable=True
     )
 
     payment_status = db.Column(
@@ -39,7 +45,8 @@ class Payment(db.Model):
             "refunded",
             name="payment_status"
         ),
-        default="pending"
+        default="pending",
+        nullable=False
     )
 
     paid_at = db.Column(
@@ -48,8 +55,36 @@ class Payment(db.Model):
 
     created_at = db.Column(
         db.DateTime,
-        default=datetime.utcnow
+        default=datetime.utcnow,
+        nullable=False
     )
 
+    # ==========================================
+    # Relationships
+    # ==========================================
+
+    order = db.relationship(
+        "Order",
+        back_populates="payments"
+    )
+
+    # ==========================================
+    # Helper Properties
+    # ==========================================
+
+    @property
+    def is_paid(self):
+
+        return self.payment_status == "paid"
+
+    # ==========================================
+    # Helper Methods
+    # ==========================================
+
     def __repr__(self):
-        return f"<Payment {self.id}>"
+
+        return (
+            f"<Payment(id={self.id}, "
+            f"status='{self.payment_status}', "
+            f"amount={self.amount})>"
+        )

@@ -1,7 +1,8 @@
 import os
 import logging
 
-from flask import Flask, render_template
+from flask import Flask
+from flask import render_template
 
 from config import Config
 
@@ -20,7 +21,10 @@ def create_app():
 
     app.config.from_object(Config)
 
+    # ==========================================
     # Initialize Extensions
+    # ==========================================
+
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
@@ -31,7 +35,10 @@ def create_app():
     login_manager.login_message = "Please log in to continue."
     login_manager.login_message_category = "warning"
 
+    # ==========================================
     # Import Models
+    # ==========================================
+
     from models import (
         User,
         Organiser,
@@ -50,9 +57,13 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
+
         return User.query.get(int(user_id))
 
+    # ==========================================
     # Register Blueprints
+    # ==========================================
+
     from routes.auth import auth_bp
     from routes.public import public_bp
     from routes.admin import admin_bp
@@ -78,7 +89,10 @@ def create_app():
         url_prefix="/api"
     )
 
-    # Create Upload Folders
+    # ==========================================
+    # Upload Folders
+    # ==========================================
+
     folders = [
         "uploads",
         "uploads/banners",
@@ -92,9 +106,16 @@ def create_app():
     ]
 
     for folder in folders:
-        os.makedirs(folder, exist_ok=True)
 
+        os.makedirs(
+            folder,
+            exist_ok=True
+        )
+
+    # ==========================================
     # Logging
+    # ==========================================
+
     if not app.debug:
 
         logging.basicConfig(
@@ -103,7 +124,20 @@ def create_app():
             format="%(asctime)s %(levelname)s: %(message)s"
         )
 
+    # ==========================================
+    # Seed Default Administrator
+    # ==========================================
+
+    with app.app_context():
+
+        from database.seed import seed_admin
+
+        seed_admin()
+
+    # ==========================================
     # Health Check
+    # ==========================================
+
     @app.route("/health")
     def health_check():
 
@@ -112,7 +146,10 @@ def create_app():
             "application": "EventHQ"
         }
 
+    # ==========================================
     # Error Handlers
+    # ==========================================
+
     @app.errorhandler(404)
     def not_found(error):
 
@@ -136,6 +173,7 @@ app = create_app()
 
 
 if __name__ == "__main__":
+
     app.run(
         host="0.0.0.0",
         port=5000,

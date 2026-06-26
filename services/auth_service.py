@@ -1,5 +1,8 @@
-from flask_login import login_user, logout_user
+from flask_login import login_user
+from flask_login import logout_user
+
 from database.db import bcrypt
+
 from models.user import User
 
 
@@ -8,28 +11,36 @@ class AuthService:
     @staticmethod
     def authenticate(email, password):
 
+        email = email.strip().lower()
+
         user = User.query.filter_by(
             email=email
         ).first()
 
-        if not user:
+        if user is None:
+
             return None
 
         if not user.is_active:
+
             return None
 
-        if bcrypt.check_password_hash(
+        if not bcrypt.check_password_hash(
             user.password_hash,
             password
         ):
-            return user
 
-        return None
+            return None
+
+        return user
 
     @staticmethod
-    def login(user):
+    def login(user, remember=False):
 
-        login_user(user)
+        login_user(
+            user,
+            remember=remember
+        )
 
     @staticmethod
     def logout():

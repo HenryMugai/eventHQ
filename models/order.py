@@ -1,11 +1,16 @@
-from database.db import db
 from datetime import datetime
+
+from database.db import db
 
 
 class Order(db.Model):
+
     __tablename__ = "orders"
 
-    id = db.Column(db.BigInteger, primary_key=True)
+    id = db.Column(
+        db.BigInteger,
+        primary_key=True
+    )
 
     order_reference = db.Column(
         db.String(100),
@@ -34,7 +39,8 @@ class Order(db.Model):
 
     total_amount = db.Column(
         db.Numeric(12, 2),
-        default=0
+        default=0.00,
+        nullable=False
     )
 
     order_status = db.Column(
@@ -45,7 +51,8 @@ class Order(db.Model):
             "refunded",
             name="order_status"
         ),
-        default="pending"
+        default="pending",
+        nullable=False
     )
 
     source = db.Column(
@@ -55,25 +62,60 @@ class Order(db.Model):
             "manual",
             name="order_source"
         ),
-        default="online"
+        default="online",
+        nullable=False
     )
 
     created_at = db.Column(
         db.DateTime,
-        default=datetime.utcnow
+        default=datetime.utcnow,
+        nullable=False
+    )
+
+    # ==========================================
+    # Relationships
+    # ==========================================
+
+    event = db.relationship(
+        "Event",
+        back_populates="orders"
     )
 
     payments = db.relationship(
         "Payment",
-        backref="order",
-        lazy=True
+        back_populates="order",
+        lazy=True,
+        cascade="all, delete-orphan"
     )
 
     tickets = db.relationship(
         "Ticket",
-        backref="order",
-        lazy=True
+        back_populates="order",
+        lazy=True,
+        cascade="all, delete-orphan"
     )
 
+    # ==========================================
+    # Helper Properties
+    # ==========================================
+
+    @property
+    def is_paid(self):
+
+        return self.order_status == "paid"
+
+    @property
+    def ticket_count(self):
+
+        return len(self.tickets)
+
+    # ==========================================
+    # Helper Methods
+    # ==========================================
+
     def __repr__(self):
-        return f"<Order {self.order_reference}>"
+
+        return (
+            f"<Order(id={self.id}, "
+            f"reference='{self.order_reference}')>"
+        )

@@ -1,15 +1,21 @@
-from database.db import db
 from datetime import datetime
+
+from database.db import db
 
 
 class Ticket(db.Model):
+
     __tablename__ = "tickets"
 
-    id = db.Column(db.BigInteger, primary_key=True)
+    id = db.Column(
+        db.BigInteger,
+        primary_key=True
+    )
 
     order_id = db.Column(
         db.BigInteger,
-        db.ForeignKey("orders.id")
+        db.ForeignKey("orders.id"),
+        nullable=True
     )
 
     event_id = db.Column(
@@ -55,7 +61,8 @@ class Ticket(db.Model):
             "refunded",
             name="ticket_status"
         ),
-        default="valid"
+        default="valid",
+        nullable=False
     )
 
     ticket_source = db.Column(
@@ -66,19 +73,75 @@ class Ticket(db.Model):
             "manual",
             name="ticket_source"
         ),
-        default="online"
+        default="online",
+        nullable=False
     )
 
     issued_at = db.Column(
         db.DateTime,
-        default=datetime.utcnow
+        default=datetime.utcnow,
+        nullable=False
+    )
+
+    # ==========================================
+    # Relationships
+    # ==========================================
+
+    order = db.relationship(
+        "Order",
+        back_populates="tickets"
+    )
+
+    event = db.relationship(
+        "Event",
+        back_populates="tickets"
+    )
+
+    ticket_type = db.relationship(
+        "TicketType",
+        back_populates="tickets"
     )
 
     checkins = db.relationship(
         "CheckIn",
-        backref="ticket",
-        lazy=True
+        back_populates="ticket",
+        lazy=True,
+        cascade="all, delete-orphan"
     )
 
+    # ==========================================
+    # Helper Properties
+    # ==========================================
+
+    @property
+    def has_checked_in(self):
+
+        return len(self.checkins) > 0
+
+    @property
+    def latest_checkin(self):
+
+        if not self.checkins:
+
+            return None
+
+        return max(
+            self.checkins,
+            key=lambda checkin: checkin.scan_time
+        )
+
+    @property
+    def is_valid(self):
+
+        return self.status == "valid"
+
+    # ==========================================
+    # Helper Methods
+    # ==========================================
+
     def __repr__(self):
-        return f"<Ticket {self.ticket_number}>"
+
+        return (
+            f"<Ticket(id={self.id}, "
+            f"number='{self.ticket_number}')>"
+        )

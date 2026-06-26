@@ -1,0 +1,339 @@
+{% extends "layouts/admin_base.html" %}
+
+{% block title %}
+Admin Dashboard | EventHQ
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/dashboard.css') }}">
+
+<div class="page-header">
+
+    <div>
+        <h1>Dashboard</h1>
+        <p>Welcome back, {{ current_user.first_name }}.</p>
+    </div>
+
+    <div>
+        <a href="{{ url_for('admin.events') }}" class="btn btn-primary">
+            <i class="ri-add-line"></i>
+            New Event
+        </a>
+    </div>
+
+</div>
+
+
+<!-- ===========================
+     KPI CARDS
+============================ -->
+
+<div class="stats-grid">
+
+    <div class="card stat-card">
+        <div>
+            <small>Total Revenue</small>
+            <h2>KES 0</h2>
+        </div>
+
+        <div class="stat-icon blue">
+            <i class="ri-money-dollar-circle-line"></i>
+        </div>
+    </div>
+
+    <div class="card stat-card">
+        <div>
+            <small>Orders</small>
+            <h2>0</h2>
+        </div>
+
+        <div class="stat-icon green">
+            <i class="ri-shopping-cart-line"></i>
+        </div>
+    </div>
+
+    <div class="card stat-card">
+        <div>
+            <small>Tickets Sold</small>
+            <h2>0</h2>
+        </div>
+
+        <div class="stat-icon orange">
+            <i class="ri-coupon-3-line"></i>
+        </div>
+    </div>
+
+    <div class="card stat-card">
+        <div>
+            <small>Check-ins</small>
+            <h2>0</h2>
+        </div>
+
+        <div class="stat-icon purple">
+            <i class="ri-qr-scan-line"></i>
+        </div>
+    </div>
+
+    <div class="card stat-card">
+        <div>
+            <small>Events</small>
+            <h2>0</h2>
+        </div>
+
+        <div class="stat-icon red">
+            <i class="ri-calendar-event-line"></i>
+        </div>
+    </div>
+
+    <div class="card stat-card">
+        <div>
+            <small>Organisers</small>
+            <h2>0</h2>
+        </div>
+
+        <div class="stat-icon teal">
+            <i class="ri-building-line"></i>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- ===========================
+     CHARTS
+============================ -->
+
+<div class="dashboard-grid">
+
+    <div class="card">
+
+        <div class="card-header">
+            <h3>Revenue Overview</h3>
+        </div>
+
+        <canvas id="revenueChart"></canvas>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+            <h3>Orders Status</h3>
+        </div>
+
+        <canvas id="ordersChart"></canvas>
+
+    </div>
+
+</div>
+
+
+<!-- ===========================
+     QUICK ACTIONS
+============================ -->
+
+<div class="card">
+
+    <div class="card-header">
+        <h3>Quick Actions</h3>
+    </div>
+
+    <div class="quick-actions">
+
+        <a href="{{ url_for('admin.events') }}" class="action-card">
+            <i class="ri-calendar-event-line"></i>
+            <span>Manage Events</span>
+        </a>
+
+        <a href="{{ url_for('admin.categories') }}" class="action-card">
+            <i class="ri-price-tag-3-line"></i>
+            <span>Categories</span>
+        </a>
+
+        <a href="{{ url_for('admin.organisers') }}" class="action-card">
+            <i class="ri-building-line"></i>
+            <span>Organisers</span>
+        </a>
+
+        <a href="{{ url_for('admin.users') }}" class="action-card">
+            <i class="ri-user-line"></i>
+            <span>Users</span>
+        </a>
+
+        <a href="{{ url_for('admin.reports') }}" class="action-card">
+            <i class="ri-bar-chart-line"></i>
+            <span>Reports</span>
+        </a>
+
+        <a href="{{ url_for('admin.settings') }}" class="action-card">
+            <i class="ri-settings-3-line"></i>
+            <span>Settings</span>
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ===========================
+     RECENT EVENTS
+============================ -->
+
+<div class="card">
+
+    <div class="card-header">
+        <h3>Recent Events</h3>
+    </div>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Event</th>
+                    <th>Venue</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% if recent_events %}
+
+                    {% for event in recent_events %}
+
+                    <tr>
+
+                        <td>{{ event.event_name }}</td>
+
+                        <td>{{ event.venue }}</td>
+
+                        <td>{{ event.status|title }}</td>
+
+                        <td>{{ event.start_datetime.strftime('%d %b %Y') }}</td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="4" style="text-align:center;">
+                            No events available.
+                        </td>
+
+                    </tr>
+
+                {% endif %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const revenueCtx = document.getElementById("revenueChart");
+
+if(revenueCtx){
+
+new Chart(revenueCtx,{
+
+type:"line",
+
+data:{
+
+labels:["Jan","Feb","Mar","Apr","May","Jun"],
+
+datasets:[{
+
+label:"Revenue",
+
+data:[0,0,0,0,0,0],
+
+borderColor:"#2563eb",
+
+backgroundColor:"rgba(37,99,235,.1)",
+
+fill:true,
+
+tension:.4
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false
+
+}
+
+});
+
+}
+
+const ordersCtx=document.getElementById("ordersChart");
+
+if(ordersCtx){
+
+new Chart(ordersCtx,{
+
+type:"doughnut",
+
+data:{
+
+labels:["Paid","Pending","Cancelled"],
+
+datasets:[{
+
+data:[0,0,0],
+
+backgroundColor:[
+
+"#16a34a",
+
+"#f59e0b",
+
+"#dc2626"
+
+]
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false
+
+}
+
+});
+
+}
+
+</script>
+
+{% endblock %}

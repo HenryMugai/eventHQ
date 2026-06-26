@@ -14,11 +14,15 @@ def admin_required(f):
 
             abort(401)
 
-        if current_user.role != "admin":
+        if not current_user.is_active:
 
             abort(403)
 
-        if not current_user.is_active:
+        if current_user.role is None:
+
+            abort(403)
+
+        if current_user.role.name != "admin":
 
             abort(403)
 

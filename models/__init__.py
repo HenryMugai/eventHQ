@@ -1,3 +1,4 @@
+from .role import Role
 from .user import User
 from .organiser import Organiser
 from .category import Category
@@ -11,3 +12,20 @@ from .support_request import SupportRequest
 from .notification import Notification
 from .audit_log import AuditLog
 from .setting import Setting
+
+__all__ = [
+    "Role",
+    "User",
+    "Organiser",
+    "Category",
+    "Event",
+    "TicketType",
+    "Order",
+    "Payment",
+    "Ticket",
+    "CheckIn",
+    "SupportRequest",
+    "Notification",
+    "AuditLog",
+    "Setting"
+]

@@ -1,6 +1,6 @@
+from flask import flash
 from flask import redirect
 from flask import url_for
-from flask import flash
 
 from flask_login import login_required
 
@@ -16,7 +16,7 @@ def logout():
     AuthService.logout()
 
     flash(
-        "Logged out successfully.",
+        "You have been logged out successfully.",
         "success"
     )
 

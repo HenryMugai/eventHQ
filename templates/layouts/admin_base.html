@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin | EventHQ{% endblock %}</title>
+
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layouts/admin_base.css') }}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<div class="admin-wrapper">
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <a href="{{ url_for('admin.dashboard') }}">
+                <i class="ri-ticket-2-fill"></i>
+                <span>EventHQ</span>
+            </a>
+        </div>
+
+        <nav>
+
+            <a href="{{ url_for('admin.dashboard') }}">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('admin.events') }}">
+                <i class="ri-calendar-event-line"></i>
+                <span>Events</span>
+            </a>
+
+            <a href="{{ url_for('admin.categories') }}">
+                <i class="ri-price-tag-3-line"></i>
+                <span>Categories</span>
+            </a>
+
+            <a href="{{ url_for('admin.organisers') }}">
+                <i class="ri-building-line"></i>
+                <span>Organisers</span>
+            </a>
+
+            <a href="{{ url_for('admin.users') }}">
+                <i class="ri-user-line"></i>
+                <span>Users</span>
+            </a>
+
+            <a href="{{ url_for('admin.orders') }}">
+                <i class="ri-shopping-bag-line"></i>
+                <span>Orders</span>
+            </a>
+
+            <a href="{{ url_for('admin.payments') }}">
+                <i class="ri-bank-card-line"></i>
+                <span>Payments</span>
+            </a>
+
+            <a href="{{ url_for('admin.tickets') }}">
+                <i class="ri-coupon-3-line"></i>
+                <span>Tickets</span>
+            </a>
+
+            <a href="{{ url_for('admin.checkins') }}">
+                <i class="ri-qr-scan-line"></i>
+                <span>Check-ins</span>
+            </a>
+
+            <a href="{{ url_for('admin.reports') }}">
+                <i class="ri-bar-chart-line"></i>
+                <span>Reports</span>
+            </a>
+
+            <a href="{{ url_for('admin.notifications') }}">
+                <i class="ri-notification-line"></i>
+                <span>Notifications</span>
+            </a>
+
+            <a href="{{ url_for('admin.settings') }}">
+                <i class="ri-settings-3-line"></i>
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <div class="main-area">
+
+        <header class="topbar">
+
+            <button id="menu-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
+
+            <form class="search-box">
+                <input type="text" placeholder="Search...">
+            </form>
+
+            <div class="top-actions">
+
+                <a href="#" class="icon-btn">
+                    <i class="ri-notification-3-line"></i>
+                </a>
+
+                <div class="profile">
+
+                    <div class="avatar">
+                        {{ current_user.first_name[0] }}{{ current_user.last_name[0] if current_user.last_name else '' }}
+                    </div>
+
+                    <div>
+                        <strong>{{ current_user.full_name }}</strong><br>
+                        <small>{{ current_user.role.name|title }}</small>
+                    </div>
+
+                </div>
+
+                <a href="{{ url_for('auth.logout') }}" class="logout-btn">
+                    Logout
+                </a>
+
+            </div>
+
+        </header>
+
+        <main class="content">
+
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block page_header %}{% endblock %}
+
+            {% block content %}{% endblock %}
+
+        </main>
+
+        <footer>
+            &copy; {{ current_year if current_year else 2026 }} EventHQ. All Rights Reserved.
+        </footer>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/layouts/admin_base.js') }}"></script>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

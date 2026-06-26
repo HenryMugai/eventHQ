@@ -3,9 +3,9 @@ from datetime import datetime
 from database.db import db
 
 
-class Category(db.Model):
+class Role(db.Model):
 
-    __tablename__ = "categories"
+    __tablename__ = "roles"
 
     id = db.Column(
         db.Integer,
@@ -13,13 +13,13 @@ class Category(db.Model):
     )
 
     name = db.Column(
-        db.String(100),
+        db.String(50),
         unique=True,
         nullable=False
     )
 
     description = db.Column(
-        db.Text
+        db.String(255)
     )
 
     created_at = db.Column(
@@ -32,11 +32,20 @@ class Category(db.Model):
     # Relationships
     # ==========================================
 
-    events = db.relationship(
-        "Event",
-        back_populates="category",
+    users = db.relationship(
+        "User",
+        back_populates="role",
         lazy=True
     )
+
+    # ==========================================
+    # Helper Properties
+    # ==========================================
+
+    @property
+    def total_users(self):
+
+        return len(self.users)
 
     # ==========================================
     # Helper Methods
@@ -45,6 +54,6 @@ class Category(db.Model):
     def __repr__(self):
 
         return (
-            f"<Category(id={self.id}, "
+            f"<Role(id={self.id}, "
             f"name='{self.name}')>"
         )

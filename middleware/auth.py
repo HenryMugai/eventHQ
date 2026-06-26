@@ -27,6 +27,19 @@ def login_required_custom(f):
                 )
             )
 
+        if not current_user.is_active:
+
+            flash(
+                "Your account has been suspended.",
+                "danger"
+            )
+
+            return redirect(
+                url_for(
+                    "auth.logout"
+                )
+            )
+
         return f(*args, **kwargs)
 
     return decorated_function

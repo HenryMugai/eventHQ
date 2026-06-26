@@ -1,20 +1,27 @@
-from database.db import db
 from datetime import datetime
+
+from database.db import db
 
 
 class Event(db.Model):
+
     __tablename__ = "events"
 
-    id = db.Column(db.BigInteger, primary_key=True)
+    id = db.Column(
+        db.BigInteger,
+        primary_key=True
+    )
 
     category_id = db.Column(
         db.Integer,
-        db.ForeignKey("categories.id")
+        db.ForeignKey("categories.id"),
+        nullable=True
     )
 
     organiser_id = db.Column(
         db.BigInteger,
-        db.ForeignKey("organisers.id")
+        db.ForeignKey("organisers.id"),
+        nullable=True
     )
 
     event_name = db.Column(
@@ -78,7 +85,8 @@ class Event(db.Model):
             "cancelled",
             name="event_status"
         ),
-        default="draft"
+        default="draft",
+        nullable=False
     )
 
     is_featured = db.Column(
@@ -88,26 +96,88 @@ class Event(db.Model):
 
     created_by = db.Column(
         db.BigInteger,
-        db.ForeignKey("users.id")
+        db.ForeignKey("users.id"),
+        nullable=False
     )
 
     created_at = db.Column(
         db.DateTime,
-        default=datetime.utcnow
+        default=datetime.utcnow,
+        nullable=False
     )
 
     updated_at = db.Column(
         db.DateTime,
         default=datetime.utcnow,
-        onupdate=datetime.utcnow
+        onupdate=datetime.utcnow,
+        nullable=False
+    )
+
+    # ==========================================
+    # Relationships
+    # ==========================================
+
+    category = db.relationship(
+        "Category",
+        back_populates="events"
+    )
+
+    organiser = db.relationship(
+        "Organiser",
+        back_populates="events"
+    )
+
+    creator = db.relationship(
+        "User",
+        foreign_keys=[created_by]
     )
 
     ticket_types = db.relationship(
         "TicketType",
-        backref="event",
+        back_populates="event",
         lazy=True,
-        cascade="all, delete"
+        cascade="all, delete-orphan"
     )
 
+    orders = db.relationship(
+        "Order",
+        back_populates="event",
+        lazy=True
+    )
+
+    tickets = db.relationship(
+        "Ticket",
+        back_populates="event",
+        lazy=True
+    )
+
+    support_requests = db.relationship(
+        "SupportRequest",
+        back_populates="event",
+        lazy=True
+    )
+
+    # ==========================================
+    # Helper Properties
+    # ==========================================
+
+    @property
+    def is_live(self):
+
+        return self.status == "published"
+
+    @property
+    def duration(self):
+
+        return self.end_datetime - self.start_datetime
+
+    # ==========================================
+    # Helper Methods
+    # ==========================================
+
     def __repr__(self):
-        return f"<Event {self.event_name}>"
+
+        return (
+            f"<Event(id={self.id}, "
+            f"name='{self.event_name}')>"
+        )
